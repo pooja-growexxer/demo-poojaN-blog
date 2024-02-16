@@ -41,12 +41,11 @@ class BlogController extends Controller
         $request->validate([
             'blog_title' => 'required',
             'blog_description' => 'required',
-            //'blog_description' => 'sometimes',
         ]);
         Blog::create(array_merge($request->all(), ['created_by'=> Auth::user()->id]));
        
         return redirect()->route('blogs.index')
-                        ->with('success','Blogs Created Successfully.');
+                        ->with('status','Blogs Created Successfully.');
     }
 
     /**
@@ -68,7 +67,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        //
+        return view('blogs.edit', compact('blog'));
     }
 
     /**
@@ -80,7 +79,17 @@ class BlogController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
-        //
+        $request->validate([
+            'blog_title' => 'required',
+            'blog_description' => 'required',
+        ]);
+
+        $blog->blog_title = $request->blog_title;
+        $blog->blog_description = $request->blog_description;
+
+        $blog->save();
+
+        return redirect()->route('blogs.index')->with('status', 'Blog Updated Successfully');
     }
 
     /**

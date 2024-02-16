@@ -17,7 +17,7 @@
             </div>
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div x-data="{ showMessage: true }" x-show="showMessage" class="flex justify-center" x-init="setTimeout(() => showMessage = false, 5000)">
+                    <!-- <div x-data="{ showMessage: true }" x-show="showMessage" class="flex justify-center" x-init="setTimeout(() => showMessage = false, 100)">
                         @if (session()->has('status'))
                         <div
                             class="flex items-center justify-between max-w-xl p-4 bg-white border rounded-md shadow-sm">
@@ -39,7 +39,7 @@
                             </span>
                         </div>
                         @endif
-                    </div>
+                    </div> -->
 
                     <div class="mt-1 mb-4">
                         <a class="px-2 py-2 text-sm text-white bg-blue-600 rounded"
