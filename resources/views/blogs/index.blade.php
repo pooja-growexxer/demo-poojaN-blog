@@ -59,14 +59,14 @@
                                     <th scope="col" class="px-6 py-3">
                                         Blog Description
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <!-- <th scope="col" class="px-6 py-3">
                                     Created By
+                                    </th> -->
+                                    <th scope="col" class="px-6 py-3">
+                                        Show Details
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Edit
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Show
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Delete
@@ -89,10 +89,10 @@
                                         {{$blog->blog_description}}
 
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <!-- <td class="px-6 py-4">
                                         {{$blog->created_by}}
 
-                                    </td>
+                                    </td> -->
                                     <td class="px-6 py-4">
                                         <a href="{{ route('blogs.show',$blog->id) }}">Show</a>
                                     </td>
