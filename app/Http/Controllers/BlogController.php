@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,8 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::latest()->paginate(50);
+       // $blogs = Blog::latest()->paginate(4);
+        $blogs = Blog::with(['categories'])->latest()->paginate(4);
 
         return view('blogs.index', compact('blogs'));
     }
@@ -28,7 +30,8 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view('blogs.create', compact([]));
+        $category = Category::all();
+        return view('blogs.create', compact('category'));
     }
 
     /**
@@ -43,8 +46,17 @@ class BlogController extends Controller
             'blog_title' => 'required',
             'blog_description' => 'required',
         ]);
-        Blog::create(array_merge($request->all(), ['created_by'=> Auth::user()->id]));
-       
+
+        $blog = Blog::create([
+            'blog_title' => $request->blog_title,
+            'blog_description' => $request->blog_description,
+            'created_by' => Auth::user()->id,
+        ]);
+
+        if ($request->has('categories')) {
+            $blog->categories()->attach($request->categories);
+        
+        }
         return redirect()->route('blogs.index')
                         ->with('status','Blogs Created Successfully.');
     }
@@ -69,7 +81,11 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        return view('blogs.edit', compact('blog'));
+        //$category = Category::all();
+
+        $blog = Blog::with('categories')->findOrFail($blog->id);
+        $category = Category::all();
+        return view('blogs.edit',compact('blog','category'));
     }
 
     /**
@@ -89,6 +105,10 @@ class BlogController extends Controller
         $blog->blog_title = $request->blog_title;
         $blog->blog_description = $request->blog_description;
 
+        if ($request->has('category')) {
+            $blog->categories()->sync($request->category);
+        }
+
         $blog->save();
 
         return redirect()->route('blogs.index')->with('status', 'Blog Updated Successfully');
@@ -102,6 +122,10 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
-        //
+        $blog->categories()->detach();
+
+        $blog->delete();
+
+        return redirect()->route('blogs.index')->with('status', 'Blog Delete Successfully');
     }
 }

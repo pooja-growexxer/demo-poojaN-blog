@@ -40,6 +40,21 @@
                                 <div class="text-sm text-red-600">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-6">
+                                <label for="category">category:</label>
+                                <select name="category[]" id="category" class="form-control" multiple>
+                                    @foreach($category as $tag)
+                                        <option value="{{ $tag->id }}" {{ in_array($tag->id, $blog->categories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                            {{ $tag->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                                @error('blog_description')
+                                <div class="text-sm text-red-600">{{ $message }}</div>
+                                @enderror
+                            </div>
                         
                             <button type="submit"
                                 class="text-white bg-blue-600  rounded text-sm px-5 py-2.5">Submit</button>
