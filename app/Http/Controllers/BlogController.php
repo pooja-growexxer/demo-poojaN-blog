@@ -30,7 +30,8 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
+        //$category = Category::all();
+        $category = $this->getDynamicCategoryOptions();
         return view('blogs.create', compact('category'));
     }
 
@@ -81,10 +82,9 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        //$category = Category::all();
-
         $blog = Blog::with('categories')->findOrFail($blog->id);
-        $category = Category::all();
+       // $category = Category::all();
+       $category = $this->getDynamicCategoryOptions();
         return view('blogs.edit',compact('blog','category'));
     }
 
@@ -127,5 +127,11 @@ class BlogController extends Controller
         $blog->delete();
 
         return redirect()->route('blogs.index')->with('status', 'Blog Delete Successfully');
+    }
+
+    public function getDynamicCategoryOptions()
+    {
+        $category = Category::all();
+        return $category;
     }
 }

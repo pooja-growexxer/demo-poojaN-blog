@@ -43,7 +43,6 @@ class BlogTest extends TestCase
     public function test_blog_create_view_is_displayed(): void
     {
         $this->signIn();
-
         $response = $this->get('/blogs/create');
         $response->assertStatus(200);
         $response->assertViewIs('blogs.create');
