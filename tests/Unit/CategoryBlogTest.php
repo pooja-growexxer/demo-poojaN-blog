@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class cccategoryBlogTest extends TestCase
+class CategoryBlogTest extends TestCase
 {
     use RefreshDatabase;
     
@@ -109,16 +109,9 @@ class cccategoryBlogTest extends TestCase
             'categories' => $categories->pluck('id')->toArray(),
         ];
 
-        // Act
         $this->put("/blogs/{$blog->id}", $blogData);
 
-        // Assert
-        //$response->assertStatus(200); // OK
         $this->assertDatabaseHas('blogs', ['blog_title' => 'blg111']);
-    
-        // $this->assertDatabaseHas('blog_category', ['blog_id' => 1, 'category_id' => $categories->first()->id]);
-
-
 
         $this->assertEquals(3, $blog->fresh()->categories->count());
     }
@@ -170,14 +163,10 @@ class cccategoryBlogTest extends TestCase
         $response = $this->get("/blogs/{$post->id}");
 
         $response->assertStatus(200);
-
-        // $this->assertDatabaseHas('blog_category', [
-        //     'blog_id' => $post->id,
-        //     'category_id' => $category->id,
-        // ]);
-        
     }
-    public function test_can_detach_category_from_post()
+
+    /** @test */
+    public function can_detach_category_from_post()
     {
         $this->signIn();
 
@@ -187,7 +176,6 @@ class cccategoryBlogTest extends TestCase
 
         $response = $this->delete("/blog/{$post->id}");
         $post->categories()->detach();
-      //  $response->assertStatus(200);
 
         $this->assertDatabaseMissing('blog_category', [
             'blog_id' => $post->id,
