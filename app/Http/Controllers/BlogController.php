@@ -17,7 +17,6 @@ class BlogController extends Controller
      */
     public function index()
     {
-       // $blogs = Blog::latest()->paginate(4);
         $blogs = Blog::with(['categories'])->latest()->paginate(4);
 
         return view('blogs.index', compact('blogs'));
@@ -129,9 +128,10 @@ class BlogController extends Controller
         return redirect()->route('blogs.index')->with('status', 'Blog Delete Successfully');
     }
 
-    public function getDynamicCategoryOptions()
+    private function getDynamicCategoryOptions()
     {
         $category = Category::all();
+        
         return $category;
     }
 }
