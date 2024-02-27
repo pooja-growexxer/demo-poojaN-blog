@@ -41,11 +41,15 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-6">
-                                <label for="category">category:</label>
+                            <div>
+                            <label for="category" class="block mb-2 text-sm font-medium text-gray-900">
+                            Select category
+                            </label>
                                 <select name="category[]" id="category" class="form-control" multiple>
                                     @foreach($category as $tag)
-                                        <option value="{{ $tag->id }}" {{ in_array($tag->id, $blog->categories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                        <option value="{{ $tag->id }}" {{ in_array($tag->id, $blog->categories->pluck('id')->toArray()) ? 'selected' : '' }}  @class([
+                                'bg-purple-600 text-white' => $blog->categories->contains($tag->id)
+                                ])>
                                             {{ $tag->name }}
                                         </option>
                                     @endforeach
@@ -55,7 +59,7 @@
                                 <div class="text-sm text-red-600">{{ $message }}</div>
                                 @enderror
                             </div>
-                        
+                     
                             <button type="submit"
                                 class="text-white bg-blue-600  rounded text-sm px-5 py-2.5">Submit</button>
                         </form>
