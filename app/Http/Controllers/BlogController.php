@@ -15,11 +15,27 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::with(['categories'])->latest()->paginate(4);
+      // $blogs = Blog::with(['categories'])->latest()->paginate(4);
 
-        return view('blogs.index', compact('blogs'));
+        $query = Blog::with('categories');
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where('blog_title', 'like', "%$searchTerm%")
+                ->orWhere('blog_description', 'like', "%$searchTerm%")
+                ->orWhereHas('categories', function ($categoryQuery) use ($searchTerm) {
+                    $categoryQuery->where('name', 'like', "%$searchTerm%");
+                });
+                
+        }
+
+       // $blogs = $query->latest()->paginate(3);
+       $blogs = $query->latest()->paginate(3)->withQueryString();
+        $categories = Category::all();
+
+        return view('blogs.index', compact('blogs', 'categories'));
     }
 
     /**
@@ -70,7 +86,8 @@ class BlogController extends Controller
     public function show(Blog $blog)
     {   
         $user = User::findorFail($blog->created_by)->pluck('name')->first();
-        return view('blogs.show', compact('blog' , 'user'));
+        $cat = Blog::with('categories')->findOrFail($blog->id);
+        return view('blogs.show', compact('blog' , 'user' , 'cat'));
     }
 
     /**

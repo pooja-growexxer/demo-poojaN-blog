@@ -102,6 +102,7 @@ class BlogTest extends TestCase
        // $this->refreshApplication();
         $this->withoutExceptionHandling();
         $user = $this->signIn();
+        
         $post = Blog::create([
             'blog_title'  => 'Test n title',
             'blog_description' => 'Test2 n blog description',
@@ -149,7 +150,6 @@ class BlogTest extends TestCase
         $this->withoutExceptionHandling();
 
         $user = $this->signIn();
-        
 
         $blog = Blog::create([
             'blog_title'  => 'Test show ',
