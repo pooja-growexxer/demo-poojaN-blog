@@ -33,6 +33,28 @@
                         <strong>Date:</strong>
                                 {{ $blog->created_at }}
                         </div>
+
+                        <div class="max-w-xl">
+                        <strong>Category:</strong>
+                        @foreach($cat->categories as $category)
+                            <span class="badge bg-info">{{ $category->name }}</span>
+                        @endforeach
+                        </div>
+
+                        @if (Auth::user()->id  == $blog->created_by) 
+                                    <div class="col-md-50" style="width: 90%">
+                                        <a href="{{ route('blogs.edit',$blog->id) }}" class="btn btn-warning btn-sm rounded-1" style="background: yellow" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="material-icons">&#xE254;</i></a>
+                                       <form method="POST" action="{{ route('blogs.destroy', $blog->id) }}"  onsubmit="return confirm('{{ trans('are You Sure ? ') }}');">
+                                            @csrf
+                                            @method('DELETE')
+                                        <div class="col-xs-4">
+                                        <button  type="submit" class="btn btn-block btn-danger fa_custom">
+                                        Delete
+                                        <i class="fa fa-trash"> </i> 
+                                        </button>
+                                        </form>
+                                    </div>
+                                    @endif
                     </div>
                 </div>
             </div>
