@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlogCreated;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\User;
@@ -73,6 +74,9 @@ class BlogController extends Controller
             $blog->categories()->attach($request->categories);
         
         }
+
+        event(new BlogCreated($blog));
+
         return redirect()->route('blogs.index')
                         ->with('status','Blogs Created Successfully.');
     }
