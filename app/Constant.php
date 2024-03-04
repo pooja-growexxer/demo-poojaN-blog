@@ -4,5 +4,11 @@ namespace App;
 
 class Constant
 {
-    public const BLOGH = 'blogs.index';
+    public const INDEX = 'blogs.index';
+
+    public const CREATE = 'blogs.create';
+
+    public const EDIT = 'blogs.edit';
+
+    public const SHOW = 'blogs.show';
 }
