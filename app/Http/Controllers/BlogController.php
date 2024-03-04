@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BlogCreated;
 use App\Models\Blog;
-use App\Models\Category;
 use App\Models\User;
+use App\Models\Category;
+use App\Jobs\SendEmailJob;
+use App\Events\BlogCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,8 +75,16 @@ class BlogController extends Controller
             $blog->categories()->attach($request->categories);
         
         }
+        $userEmail = User::findorFail($blog->created_by)->pluck('email')->first();
+        $data = [
+                'email' => $userEmail,
+                'blog_title' => $blog->blog_title,
+                'blog_description' => $blog->blog_description
+            ];
 
-        event(new BlogCreated($blog));
+            dispatch(new SendEmailJob($data));
+            
+        //event(new BlogCreated($blog));
 
         return redirect()->route('blogs.index')
                         ->with('status','Blogs Created Successfully.');
