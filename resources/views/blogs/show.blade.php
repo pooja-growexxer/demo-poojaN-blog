@@ -44,7 +44,7 @@
                         @if (Auth::user()->id  == $blog->created_by) 
                                     <div class="col-md-50" style="width: 90%">
                                         <a href="{{ route('blogs.edit',$blog->id) }}" class="btn btn-warning btn-sm rounded-1" style="background: yellow" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="material-icons">&#xE254;</i></a>
-                                       <form method="POST" action="{{ route('blogs.destroy', $blog->id) }}"  onsubmit="return confirm('{{ trans('are You Sure ? ') }}');">
+                                       <form method="POST" action="{{ route('blogs.destroy', $blog->id) }}"  onsubmit="return confirm('{{ trans('Are You Sure ? ') }}');">
                                             @csrf
                                             @method('DELETE')
                                         <div class="col-xs-4">
