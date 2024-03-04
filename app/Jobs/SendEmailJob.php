@@ -36,15 +36,13 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        //dd($this->data, 'dkkk');
-        \Log::info('Hnadle job');
-        //$email = new SendEmailByQueue($this->details);
+        \Log::info('Handle job');
         try {
             Mail::to($this->data['email'])->send(new SendEmailByQueue($this->data));
-            \Log::info('Sucessful Mail Sent!');
+                \Log::info('Sucessful Mail Sent!');
            } catch (\Throwable $th) {
-            \Log::info('Mail Faileddd!');
-            \Log::error('Error in  send mail:' . $th->getMessage());
+                \Log::info('Mail Faileddd!');
+                \Log::error('Error in  Send Mail:' . $th->getMessage());
             } 
        
     }

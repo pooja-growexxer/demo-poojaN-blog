@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Category;
 use App\Jobs\SendEmailJob;
 use App\Events\BlogCreated;
+use App\Constant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,8 +20,6 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-      // $blogs = Blog::with(['categories'])->latest()->paginate(4);
-
         $query = Blog::with('categories');
 
         if ($request->filled('search')) {
@@ -33,11 +32,11 @@ class BlogController extends Controller
                 
         }
 
-       // $blogs = $query->latest()->paginate(3);
-       $blogs = $query->latest()->paginate(3)->withQueryString();
+        $blogs = $query->latest()->paginate(3)->withQueryString();
+
         $categories = Category::all();
 
-        return view('blogs.index', compact('blogs', 'categories'));
+        return view(Constant::INDEX, compact('blogs', 'categories'));
     }
 
     /**
@@ -47,9 +46,8 @@ class BlogController extends Controller
      */
     public function create()
     {
-        //$category = Category::all();
         $category = $this->getDynamicCategoryOptions();
-        return view('blogs.create', compact('category'));
+        return view(Constant::CREATE, compact('category'));
     }
 
     /**
@@ -84,9 +82,7 @@ class BlogController extends Controller
 
             dispatch(new SendEmailJob($data));
             
-        //event(new BlogCreated($blog));
-
-        return redirect()->route('blogs.index')
+        return redirect()->route(Constant::INDEX)
                         ->with('status','Blogs Created Successfully.');
     }
 
@@ -100,7 +96,7 @@ class BlogController extends Controller
     {   
         $user = User::findorFail($blog->created_by)->pluck('name')->first();
         $cat = Blog::with('categories')->findOrFail($blog->id);
-        return view('blogs.show', compact('blog' , 'user' , 'cat'));
+        return view(Constant::SHOW, compact('blog' , 'user' , 'cat'));
     }
 
     /**
@@ -112,9 +108,9 @@ class BlogController extends Controller
     public function edit(Blog $blog)
     {
         $blog = Blog::with('categories')->findOrFail($blog->id);
-       // $category = Category::all();
-       $category = $this->getDynamicCategoryOptions();
-        return view('blogs.edit',compact('blog','category'));
+        $category = $this->getDynamicCategoryOptions();
+
+        return view(Constant::EDIT, compact('blog','category'));
     }
 
     /**
@@ -140,7 +136,7 @@ class BlogController extends Controller
 
         $blog->save();
 
-        return redirect()->route('blogs.index')->with('status', 'Blog Updated Successfully');
+        return redirect()->route(Constant::INDEX)->with('status', 'Blog Updated Successfully');
     }
 
     /**
@@ -155,13 +151,11 @@ class BlogController extends Controller
 
         $blog->delete();
 
-        return redirect()->route('blogs.index')->with('status', 'Blog Delete Successfully');
+        return redirect()->route(Constant::INDEX)->with('status', 'Blog Delete Successfully');
     }
 
     private function getDynamicCategoryOptions()
     {
-        $category = Category::all();
-        
-        return $category;
+        return Category::all();
     }
 }
